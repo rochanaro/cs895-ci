@@ -289,12 +289,21 @@ def uint2tensor3(img):
     return torch.from_numpy(np.ascontiguousarray(img)).permute(2, 0, 1).float().div(255.)
 
 
-# convert 2/3/4-dimensional torch tensor to uint
+# # convert 2/3/4-dimensional torch tensor to uint
+# def tensor2uint(img):
+#     img = img.data.squeeze().float().clamp_(0, 1).cpu().numpy()
+#     if img.ndim == 3:
+#         img = np.transpose(img, (1, 2, 0))
+#     return np.uint8((img*255.0).round())
+
+# lemos newly added
+# convert 2/3/4-dimensional torch tensor to uint16 for 16-bit TIF files
 def tensor2uint(img):
     img = img.data.squeeze().float().clamp_(0, 1).cpu().numpy()
     if img.ndim == 3:
         img = np.transpose(img, (1, 2, 0))
-    return np.uint8((img*255.0).round())
+    return np.uint16((img*65535.0).round())  # 16-bit range is 0-65535
+#####
 
 
 # --------------------------------------------
